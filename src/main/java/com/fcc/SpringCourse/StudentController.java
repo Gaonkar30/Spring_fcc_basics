@@ -1,0 +1,77 @@
+package com.fcc.SpringCourse;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+public class StudentController {
+
+
+
+    private final StudentRepository repository;
+
+    public StudentController(StudentRepository repository) {
+        this.repository = repository;
+    }
+
+    // performing crud operations
+    //create
+    @PostMapping("/Students")
+    public Student post(@RequestBody Student student){
+        return repository.save(student); // to make the student persistent
+    }
+    //get
+    @GetMapping("/Students/{student-id}")
+    public Student getStudentById(@PathVariable("student-id") Integer id){
+        return repository.findById(id)
+                .orElse(null);
+    }
+    @GetMapping("/Students")
+    public List<Student> getAllStudents(){
+        return repository.findAll();
+    }
+    // creating custom methods
+    @GetMapping("/Students/search/{student-name}")
+    public List<Student> findStudentByName(@PathVariable("student-name") String name){
+        return repository.findAllByfirstNameContaining(name);
+    }
+    //Deleting
+    @DeleteMapping("/Students/{student-id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable("student-id") Integer id){
+        repository.deleteById(id);
+    }
+
+
+
+
+    //    @GetMapping("/")
+//    @ResponseStatus(HttpStatus.ACCEPTED)
+//    public String sayHello() {
+//        return "Hello From Controller";
+//    }
+//    @PostMapping("/post")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public String posted(@RequestBody String message){
+//        return "Message recieved "+ message;
+//    }
+
+//
+//    @PostMapping("/post-order")
+//    public String postedOrder(@RequestBody Order order){
+//        return "Order Placed " +order.toString();
+//    }
+//    // to get details from the path variable
+//    @GetMapping("/hello/{user-name}")
+//    public String sayhello(@PathVariable("user-name") String Username){
+//        return "Hi to "+Username;
+//    }
+//    // to access request parameters
+//    @GetMapping("/bye")
+//    public String getreqParams(@RequestParam("user-name") String userName,
+//                               @RequestParam("user-lastname") String userLastName){
+//        return "Hi "+ userName + " "+ userLastName;
+//    }
+}
