@@ -1,9 +1,7 @@
 package com.fcc.SpringCourse;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +22,10 @@ public class SchoolController {
     @GetMapping("/schools")
     public List<School> getSchools(){
         return schoolRepository.findAll();
+    }
+    @DeleteMapping("/schools/{school-id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteSchool(@PathVariable("school-id") Integer id){
+        schoolRepository.deleteById(id);
     }
 }

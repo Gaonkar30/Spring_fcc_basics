@@ -12,16 +12,37 @@ public class StudentController {
 
     private final StudentRepository repository;
 
-    public StudentController(StudentRepository repository) {
+    public StudentController(StudentRepository repository, StudentMapper studentMapper) {
         this.repository = repository;
+        this.studentMapper = studentMapper;
     }
+// service layer's code
+    private final StudentMapper studentMapper;
+
 
     // performing crud operations
     //create
     @PostMapping("/Students")
-    public Student post(@RequestBody Student student){
-        return repository.save(student); // to make the student persistent
+    public StudentResponseDto post(@RequestBody StudentDto dtoguy){
+        var student=StudentMapper.toStudent(dtoguy);
+        var savedstud=repository.save(student); // to make the student persistent
+        return StudentMapper.toStudentresponseDto(savedstud); // to not expose extra info like attributes that are null in response
     }
+    // converting dtostudent to student object
+//    private Student toStudent(StudentDto dtoguy){
+//        Student newstud=new Student();
+//        newstud.setFirstName(dtoguy.firstName());
+//        newstud.setLastName(dtoguy.lastName());
+//        newstud.setEmail(dtoguy.email());
+//        //referencing with the school
+//        School newSchool=new School();
+//        newSchool.setId(dtoguy.schoolId());
+//        newstud.setSchool(newSchool);
+//        return newstud;
+//    }
+//    private StudentResponseDto toStudentresponseDto(Student student){
+//        return new StudentResponseDto(student.getFirstName(),student.getLastName(),student.getEmail());
+//    }
     //get
     @GetMapping("/Students/{student-id}")
     public Student getStudentById(@PathVariable("student-id") Integer id){
