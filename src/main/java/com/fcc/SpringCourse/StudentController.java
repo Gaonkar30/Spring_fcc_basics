@@ -8,25 +8,29 @@ import java.util.List;
 @RestController
 public class StudentController {
 
+private final StudentService studentService;
 
-
-    private final StudentRepository repository;
-
-    public StudentController(StudentRepository repository, StudentMapper studentMapper) {
-        this.repository = repository;
-        this.studentMapper = studentMapper;
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
     }
+//    private final StudentRepository repository;
+//    private final StudentMapper studentMapper;
+//    public StudentController(StudentRepository repository, StudentMapper studentMapper) {
+//        this.repository = repository;
+//        this.studentMapper = studentMapper;
+//    }
 // service layer's code
-    private final StudentMapper studentMapper;
+
 
 
     // performing crud operations
     //create
     @PostMapping("/Students")
-    public StudentResponseDto post(@RequestBody StudentDto dtoguy){
-        var student=StudentMapper.toStudent(dtoguy);
-        var savedstud=repository.save(student); // to make the student persistent
-        return StudentMapper.toStudentresponseDto(savedstud); // to not expose extra info like attributes that are null in response
+    public StudentResponseDto saveStudent(@RequestBody StudentDto dtoguy){
+//        var student=StudentMapper.toStudent(dtoguy);
+//        var savedstud=repository.save(student); // to make the student persistent
+//        return StudentMapper.toStudentresponseDto(savedstud); // to not expose extra info like attributes that are null in response
+        return this.studentService.saveStudent(dtoguy);
     }
     // converting dtostudent to student object
 //    private Student toStudent(StudentDto dtoguy){
